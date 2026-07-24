@@ -147,15 +147,16 @@ def test_book_test_drive(client, normal_user_headers, db_session):
 
     td_payload = {
         "vehicle_id": v.id,
-        "customer_name": "Ananya Roy",
-        "customer_phone": "9123456789",
-        "customer_email": "ananya@example.com"
+        "booking_date": "2026-08-05",
+        "booking_time": "11:00 AM",
+        "contact_number": "9123456789",
+        "notes": "Test drive request"
     }
     res = client.post("/api/test-drives", json=td_payload, headers=normal_user_headers)
     assert res.status_code == status.HTTP_201_CREATED
     data = res.json()
-    assert data["customer_name"] == "Ananya Roy"
-    assert data["status"] == "Scheduled"
+    assert data["contact_number"] == "9123456789"
+    assert data["status"] == "Pending"
 
 # Test Image Upload API
 def test_upload_vehicle_image(client, admin_user_headers):

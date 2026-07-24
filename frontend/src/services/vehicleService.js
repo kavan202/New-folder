@@ -33,7 +33,13 @@ export const vehicleService = {
   },
 
   async purchase(id, customerData) {
-    const response = await api.post(`/vehicles/${id}/purchase`, customerData);
+    const response = await api.post(`/orders/purchase`, {
+      vehicle_id: id,
+      quantity: customerData?.quantity || 1,
+      customer_name: customerData?.customer_name,
+      customer_phone: customerData?.customer_phone,
+      customer_email: customerData?.customer_email,
+    });
     return response.data;
   },
 
@@ -56,7 +62,7 @@ export const vehicleService = {
   },
 
   async bookTestDrive(testDriveData) {
-    const response = await api.post('/test-drives', testDriveData);
+    const response = await api.post('/test-drives/book', testDriveData);
     return response.data;
   },
 

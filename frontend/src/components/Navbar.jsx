@@ -1,7 +1,16 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { CarFront, ShieldAlert, LogOut, LayoutDashboard, UserCheck, BarChart3 } from 'lucide-react';
+import {
+  CarFront,
+  ShieldAlert,
+  LogOut,
+  LayoutDashboard,
+  UserCheck,
+  BarChart3,
+  ShoppingBag,
+  Calendar,
+} from 'lucide-react';
 
 export default function Navbar() {
   const { user, logout, isAdmin } = useAuth();
@@ -31,7 +40,7 @@ export default function Navbar() {
 
           {/* Nav Links */}
           {user && (
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               <Link
                 to="/dashboard"
                 className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
@@ -44,17 +53,41 @@ export default function Navbar() {
                 <span>Dashboard</span>
               </Link>
 
+              <Link
+                to="/purchases"
+                className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                  isActive('/purchases')
+                    ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-500/30'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                }`}
+              >
+                <ShoppingBag className="w-4 h-4 text-emerald-400" />
+                <span>My Purchases</span>
+              </Link>
+
+              <Link
+                to="/test-drives"
+                className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                  isActive('/test-drives')
+                    ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                }`}
+              >
+                <Calendar className="w-4 h-4 text-indigo-400" />
+                <span>My Test Drives</span>
+              </Link>
+
               {isAdmin && (
                 <>
                   <Link
                     to="/admin"
                     className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                       isActive('/admin')
-                        ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30'
+                        ? 'bg-purple-600/20 text-purple-400 border border-purple-500/30'
                         : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
                     }`}
                   >
-                    <ShieldAlert className="w-4 h-4 text-indigo-400" />
+                    <ShieldAlert className="w-4 h-4 text-purple-400" />
                     <span>Admin Panel</span>
                   </Link>
 
@@ -62,25 +95,25 @@ export default function Navbar() {
                     to="/analytics"
                     className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                       isActive('/analytics')
-                        ? 'bg-purple-600/20 text-purple-400 border border-purple-500/30'
+                        ? 'bg-amber-600/20 text-amber-400 border border-amber-500/30'
                         : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
                     }`}
                   >
-                    <BarChart3 className="w-4 h-4 text-purple-400" />
+                    <BarChart3 className="w-4 h-4 text-amber-400" />
                     <span>Analytics</span>
                   </Link>
                 </>
               )}
 
               {/* User Profile Pill */}
-              <div className="flex items-center space-x-3 pl-4 border-l border-slate-800">
+              <div className="flex items-center space-x-3 pl-3 border-l border-slate-800">
                 <div className="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800">
                   <UserCheck className="w-4 h-4 text-blue-400" />
                   <span className="text-xs font-semibold text-slate-200">{user.username}</span>
                   <span
                     className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
                       isAdmin
-                        ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+                        ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
                         : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
                     }`}
                   >

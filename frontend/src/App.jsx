@@ -5,6 +5,8 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import MyPurchases from './pages/MyPurchases';
+import MyTestDrives from './pages/MyTestDrives';
 import AdminPanel from './pages/AdminPanel';
 import AnalyticsPanel from './pages/AnalyticsPanel';
 
@@ -44,6 +46,22 @@ function MainLayout() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/purchases"
+            element={
+              <ProtectedRoute>
+                <MyPurchases />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/test-drives"
+            element={
+              <ProtectedRoute>
+                <MyTestDrives />
               </ProtectedRoute>
             }
           />

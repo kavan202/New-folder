@@ -104,9 +104,9 @@ car-dealership-inventory/
 - PostgreSQL 18 (Running locally with user `postgres` and password `admin123`)
 
 ### 1. Database Setup
-Ensure PostgreSQL is running, then create the `car_inventory` database:
+Ensure PostgreSQL is running, then create the `car` database:
 ```sql
-CREATE DATABASE car_inventory;
+CREATE DATABASE car;
 ```
 
 ### 2. Backend Setup
