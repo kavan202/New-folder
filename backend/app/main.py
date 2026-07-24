@@ -10,8 +10,11 @@ from app.routers.testdrive_router import router as testdrive_router
 from app.routers.order_router import router as order_router
 from app.routers.analytics_router import router as analytics_router
 
-# Ensure tables are created
-Base.metadata.create_all(bind=engine)
+# Ensure tables are created safely
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Database setup warning on startup: {e}")
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
