@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api"
     
     # Database
-    DATABASE_URL: str = "postgresql://postgres:admin123@localhost:5432/car"
+    DATABASE_URL: str = "sqlite:///./sqlite.db"
     TEST_DATABASE_URL: str = "sqlite:///:memory:"
     
     # Security
