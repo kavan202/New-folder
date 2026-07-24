@@ -26,7 +26,20 @@ export default function Register() {
       await login({ username: formData.username, password: formData.password });
       navigate('/dashboard');
     } catch (err) {
-      const msg = err.response?.data?.detail || 'Failed to create account';
+      console.error('Registration error:', err);
+      let msg = 'Failed to create account';
+      if (err.response?.data?.detail) {
+        const detail = err.response.data.detail;
+        if (typeof detail === 'string') {
+          msg = detail;
+        } else if (Array.isArray(detail)) {
+          msg = detail.map(d => (typeof d === 'object' ? d.msg || JSON.stringify(d) : String(d))).join(', ');
+        } else if (typeof detail === 'object') {
+          msg = detail.message || JSON.stringify(detail);
+        }
+      } else if (err.message) {
+        msg = err.message;
+      }
       setError(msg);
     } finally {
       setIsSubmitting(false);

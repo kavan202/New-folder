@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -10,6 +11,7 @@ from app.services.user_service import UserService
 from app.auth import create_access_token, get_current_admin_user
 from app.models.user import User
 
+logger = logging.getLogger("app.registration")
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 class LoginRequest(BaseModel):
@@ -18,6 +20,7 @@ class LoginRequest(BaseModel):
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def register(user_in: UserCreate, db: Session = Depends(get_db)):
+    logger.info("[AUTH ROUTER] Received POST /api/auth/register for username: '%s'", user_in.username)
     return UserService.register_user(db=db, user_in=user_in)
 
 @router.post("/register-admin", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
@@ -26,6 +29,7 @@ def register_admin(
     current_admin: User = Depends(get_current_admin_user), 
     db: Session = Depends(get_db)
 ):
+    logger.info("[AUTH ROUTER] Received POST /api/auth/register-admin for username: '%s'", user_in.username)
     return UserService.register_admin_user(db=db, user_in=user_in)
 
 @router.post("/login", response_model=Token)
