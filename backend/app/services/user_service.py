@@ -71,7 +71,7 @@ class UserService:
             logger.error("[REGISTRATION] Step 3: Password hashing failed for username '%s': %s", user_in.username, e, exc_info=True)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Password hashing failed"
+                detail=f"Password hashing failed: {str(e)}"
             )
 
         # Step 4: Database insertion

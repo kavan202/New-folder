@@ -1,3 +1,4 @@
+import bcrypt
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 import jwt
@@ -15,9 +16,31 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    if not plain_password or not hashed_password:
+        return False
+    # Try passlib first
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except Exception:
+        pass
+    # Fallback to direct bcrypt checkpw
+    try:
+        return bcrypt.checkpw(
+            plain_password.encode('utf-8'),
+            hashed_password.encode('utf-8')
+        )
+    except Exception:
+        return False
 
 def get_password_hash(password: str) -> str:
+    # Try direct bcrypt first (prevents passlib 1.7.4 + bcrypt 4.x compatibility crash on Python 3.12)
+    try:
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+        return hashed.decode('utf-8')
+    except Exception:
+        pass
+    # Fallback to passlib
     return pwd_context.hash(password)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
