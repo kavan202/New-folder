@@ -1,17 +1,24 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.config import settings
 
-# Render provides postgres:// but SQLAlchemy 2.x requires postgresql://
-database_url = settings.DATABASE_URL
-if database_url.startswith("postgres://"):
-    database_url = database_url.replace("postgres://", "postgresql://", 1)
+# Fetch DATABASE_URL from environment variable (as shown in Step 7)
+DATABASE_URL = os.getenv("DATABASE_URL", settings.DATABASE_URL)
 
-# Create engine with connect args for SQLite if SQLite URL is provided
-connect_args = {"check_same_thread": False} if database_url.startswith("sqlite") else {}
+# Fix postgres:// scheme to postgresql:// for SQLAlchemy compatibility
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# Configure connect_args based on environment (sslmode="require" for cloud Postgres, SQLite args for local testing)
+connect_args = {}
+if DATABASE_URL.startswith("sqlite"):
+    connect_args["check_same_thread"] = False
+elif "localhost" not in DATABASE_URL and "127.0.0.1" not in DATABASE_URL:
+    connect_args["sslmode"] = "require"
 
 engine = create_engine(
-    database_url,
+    DATABASE_URL,
     connect_args=connect_args,
     pool_pre_ping=True
 )
@@ -24,3 +31,4 @@ def get_db():
         yield db
     finally:
         db.close()
+
