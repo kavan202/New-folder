@@ -1,3 +1,9 @@
+databases:
+  - name: autovault-db
+    plan: free
+    databaseName: autovault
+    user: autovault_user
+
 services:
   - type: web
     name: autovault-car-dealership-api
@@ -6,6 +12,10 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: autovault-db
+          property: connectionURI
       - key: PYTHON_VERSION
         value: 3.12.2
       - key: SECRET_KEY
